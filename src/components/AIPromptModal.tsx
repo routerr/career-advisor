@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, Copy, ExternalLink } from 'lucide-react';
 
-interface ChatGPTPromptModalProps {
+interface AIPromptModalProps {
   open: boolean;
   onClose: () => void;
   prompt: string;
   lang: 'en' | 'zh';
   didAutoCopy?: boolean;
+  providerName: string;
+  providerUrl: string;
 }
 
 async function copyToClipboard(text: string): Promise<boolean> {
@@ -18,12 +20,14 @@ async function copyToClipboard(text: string): Promise<boolean> {
   }
 }
 
-export const ChatGPTPromptModal: React.FC<ChatGPTPromptModalProps> = ({
+export const AIPromptModal: React.FC<AIPromptModalProps> = ({
   open,
   onClose,
   prompt,
   lang,
   didAutoCopy = false,
+  providerName,
+  providerUrl,
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [manuallyCopied, setManuallyCopied] = useState(false);
@@ -57,7 +61,7 @@ export const ChatGPTPromptModal: React.FC<ChatGPTPromptModalProps> = ({
         <div className="w-full max-w-3xl rounded-2xl bg-white dark:bg-surfaceDark shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
           <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-700">
             <div className="font-bold text-gray-900 dark:text-gray-100">
-              {lang === 'en' ? 'ChatGPT Suggestions' : '使用 ChatGPT 取得建議'}
+              {lang === 'en' ? `Open in ${providerName}` : `使用 ${providerName} 取得建議`}
             </div>
             <button
               type="button"
@@ -72,8 +76,8 @@ export const ChatGPTPromptModal: React.FC<ChatGPTPromptModalProps> = ({
           <div className="p-5 space-y-4">
             <div className="text-sm text-gray-600 dark:text-gray-300">
               {copied
-                ? (lang === 'en' ? 'Prompt copied. Paste it into ChatGPT.' : '提示詞已複製，請到 ChatGPT 貼上。')
-                : (lang === 'en' ? 'Copy the prompt and paste it into ChatGPT.' : '請複製提示詞並貼到 ChatGPT。')}
+                ? (lang === 'en' ? 'Prompt copied. Paste it into the AI chat.' : '提示詞已複製，請到 AI 對話頁貼上。')
+                : (lang === 'en' ? 'Copy the prompt and paste it into the AI chat.' : '請複製提示詞並貼到 AI 對話頁。')}
             </div>
 
             <textarea
@@ -97,11 +101,11 @@ export const ChatGPTPromptModal: React.FC<ChatGPTPromptModalProps> = ({
               </button>
               <button
                 type="button"
-                onClick={() => window.open('https://chatgpt.com/', '_blank', 'noopener,noreferrer')}
+                onClick={() => window.open(providerUrl, '_blank', 'noopener,noreferrer')}
                 className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/80 dark:bg-surfaceDark hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors font-medium border border-gray-200 dark:border-gray-700"
               >
                 <ExternalLink size={18} />
-                {lang === 'en' ? 'Open ChatGPT' : '開啟 ChatGPT'}
+                {lang === 'en' ? `Open ${providerName}` : `開啟 ${providerName}`}
               </button>
               <button
                 type="button"

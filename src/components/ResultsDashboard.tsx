@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { type Scores, findJobMatches } from '../utils/scoring';
 import { jobs } from '../data/jobs';
@@ -7,8 +7,8 @@ import { RadarChart } from './RadarChart';
 import { ShareStoryModal } from './ShareStoryModal';
 import { BigFiveChart } from './BigFiveChart';
 import { WorkValuesChart } from './WorkValuesChart';
-import { ChatGPTPromptModal } from './ChatGPTPromptModal';
-import { RefreshCcw, Briefcase, DollarSign, Share2, Sparkles, Trash2, Undo2 } from 'lucide-react';
+import { AIPromptModal } from './AIPromptModal';
+import { RefreshCcw, Briefcase, DollarSign, Share2, Sparkles, Trash2, Undo2, ChevronDown } from 'lucide-react';
 import { generateChatGPTPrompt } from '../utils/promptGenerator';
 import type { StoredResults } from '../utils/cookies';
 
@@ -22,12 +22,48 @@ interface ResultsDashboardProps {
   onClearResults: () => void;
 }
 
+type AIProviderId = 'chatgpt' | 'claude' | 'gemini' | 'perplexity' | 'grok';
+
+const AI_PROVIDERS: Record<AIProviderId, { name: string; url: string; supportsPrefill: boolean }> = {
+  chatgpt: { name: 'ChatGPT', url: 'https://chatgpt.com/', supportsPrefill: true },
+  claude: { name: 'Claude', url: 'https://claude.ai/new', supportsPrefill: true }, // may be unreliable; modal + clipboard is primary
+  gemini: { name: 'Gemini', url: 'https://gemini.google.com/app', supportsPrefill: false },
+  perplexity: { name: 'Perplexity', url: 'https://www.perplexity.ai/', supportsPrefill: true },
+  grok: { name: 'Grok', url: 'https://grok.com', supportsPrefill: false },
+};
+
+function buildProviderUrl(provider: AIProviderId, prompt: string): string {
+  const encoded = encodeURIComponent(prompt);
+  // Avoid extremely long URLs; clipboard + modal is the reliable path.
+  const safeToPrefill = encoded.length <= 1800;
+
+  if (!AI_PROVIDERS[provider].supportsPrefill || !safeToPrefill) {
+    return AI_PROVIDERS[provider].url;
+  }
+
+  switch (provider) {
+    case 'chatgpt':
+      return `https://chatgpt.com/?q=${encoded}`;
+    case 'claude':
+      return `https://claude.ai/new?q=${encoded}`;
+    case 'perplexity':
+      // Common pattern for address-bar search engines.
+      return `https://www.perplexity.ai/search?q=${encoded}&copilot=true`;
+    default:
+      return AI_PROVIDERS[provider].url;
+  }
+}
+
 export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ scores, lang, onRestart, onRedoLastQuestion, darkMode, storedResults, onClearResults }) => {
   const [isShareOpen, setIsShareOpen] = useState(false);
-  const [isChatGPTOpen, setIsChatGPTOpen] = useState(false);
-  const [chatGPTPrompt, setChatGPTPrompt] = useState('');
+  const [isAIPromptOpen, setIsAIPromptOpen] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState('');
+  const [aiProvider, setAiProvider] = useState<AIProviderId>('chatgpt');
+  const [aiProviderOpenUrl, setAiProviderOpenUrl] = useState(AI_PROVIDERS.chatgpt.url);
   const [didAutoCopy, setDidAutoCopy] = useState(false);
-  const [chatGPTModalKey, setChatGPTModalKey] = useState(0);
+  const [aiModalKey, setAiModalKey] = useState(0);
+  const [aiMenuOpen, setAiMenuOpen] = useState(false);
+  const aiMenuRef = useRef<HTMLDivElement>(null);
 
   const matches = useMemo(() => findJobMatches(scores, jobs), [scores]);
   const mbtiLike = useMemo(() => {
@@ -57,6 +93,24 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ scores, lang
   const matchedJobs = useMemo(() => matches.slice(0, 5), [matches]);
   const topJob = matchedJobs[0];
 
+  useEffect(() => {
+    if (!aiMenuOpen) return;
+    const onMouseDown = (e: MouseEvent) => {
+      const el = aiMenuRef.current;
+      if (!el) return;
+      if (e.target instanceof Node && !el.contains(e.target)) setAiMenuOpen(false);
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setAiMenuOpen(false);
+    };
+    window.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [aiMenuOpen]);
+
   if (!topJob) {
     console.error("No job matches found!", { scores, matches });
     return <div className="p-8 text-center">No matching jobs found. Please try again.</div>;
@@ -66,15 +120,19 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ scores, lang
     setIsShareOpen(true);
   };
 
-  const handleChatGPTClick = async () => {
+  const handleAIProviderClick = async (provider: AIProviderId) => {
     const prompt = generateChatGPTPrompt(scores, matchedJobs, lang);
-    setChatGPTPrompt(prompt);
+    const openUrl = buildProviderUrl(provider, prompt);
+    setAiPrompt(prompt);
+    setAiProvider(provider);
+    setAiProviderOpenUrl(openUrl);
     setDidAutoCopy(false);
-    setChatGPTModalKey((k) => k + 1);
-    setIsChatGPTOpen(true);
+    setAiModalKey((k) => k + 1);
+    setIsAIPromptOpen(true);
+    setAiMenuOpen(false);
 
-    // Open ChatGPT in a new tab (prefill isn't reliable; we prefer clipboard + paste).
-    window.open('https://chatgpt.com/', '_blank', 'noopener,noreferrer');
+    // Open provider in a new tab (clipboard + paste is the reliable path).
+    window.open(openUrl, '_blank', 'noopener,noreferrer');
 
     // Try to copy prompt for reliable pasting.
     try {
@@ -95,13 +153,15 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ scores, lang
         topJob={topJob.title[lang]}
         matchScore={topJob.matchScore}
       />
-      <ChatGPTPromptModal
-        key={chatGPTModalKey}
-        open={isChatGPTOpen}
-        onClose={() => setIsChatGPTOpen(false)}
-        prompt={chatGPTPrompt}
+      <AIPromptModal
+        key={aiModalKey}
+        open={isAIPromptOpen}
+        onClose={() => setIsAIPromptOpen(false)}
+        prompt={aiPrompt}
         lang={lang}
         didAutoCopy={didAutoCopy}
+        providerName={AI_PROVIDERS[aiProvider].name}
+        providerUrl={aiProviderOpenUrl}
       />
 
       <motion.div 
@@ -349,13 +409,46 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ scores, lang
           {lang === 'en' ? 'Last Question' : '最後一題'}
         </button>
 
-        <button 
-          onClick={handleChatGPTClick}
-          className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-secondaryLight to-accentLight dark:from-secondaryDark dark:to-accentDark text-white hover:shadow-lg hover:shadow-blue-500/25 transition-all font-bold"
-        >
-          <Sparkles size={18} />
-          {lang === 'en' ? 'Continue with ChatGPT' : '使用 ChatGPT 取得建議'}
-        </button>
+        <div className="relative" ref={aiMenuRef}>
+          <button
+            type="button"
+            onClick={() => setAiMenuOpen((v) => !v)}
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-secondaryLight to-accentLight dark:from-secondaryDark dark:to-accentDark text-white hover:shadow-lg hover:shadow-blue-500/25 transition-all font-bold"
+            aria-haspopup="menu"
+            aria-expanded={aiMenuOpen}
+          >
+            <Sparkles size={18} />
+            {lang === 'en' ? 'Get AI Suggestions' : '使用 AI 取得建議'}
+            <ChevronDown size={18} className={aiMenuOpen ? 'rotate-180 transition-transform' : 'transition-transform'} />
+          </button>
+
+          {aiMenuOpen && (
+            <div
+              role="menu"
+              className="absolute right-0 mt-2 w-[260px] rounded-2xl bg-white dark:bg-surfaceDark shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-50"
+            >
+              {(Object.keys(AI_PROVIDERS) as AIProviderId[]).map((id) => (
+                <button
+                  key={id}
+                  type="button"
+                  role="menuitem"
+                  onClick={() => handleAIProviderClick(id)}
+                  className="w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between"
+                >
+                  <span className="font-semibold text-gray-900 dark:text-gray-100">{AI_PROVIDERS[id].name}</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {AI_PROVIDERS[id].supportsPrefill ? (lang === 'en' ? 'prefill*' : '可預填*') : (lang === 'en' ? 'paste' : '貼上')}
+                  </span>
+                </button>
+              ))}
+              <div className="px-4 py-3 text-xs text-gray-500 dark:text-gray-400 border-t border-gray-100 dark:border-gray-700">
+                {lang === 'en'
+                  ? '*Prefill may not work reliably; we also copy the prompt.'
+                  : '*預填不一定可靠；我們也會自動複製提示詞。'}
+              </div>
+            </div>
+          )}
+        </div>
 
         <button 
           onClick={handleShare}
