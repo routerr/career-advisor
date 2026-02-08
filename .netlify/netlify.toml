@@ -1,0 +1,49 @@
+redirectsOrigin = "config"
+plugins = []
+
+[dev]
+command = "npm run dev"
+port = 5173.0
+target = "custom"
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "/Users/raychang/repo/career-advisor/dist"
+publishOrigin = "config"
+commandOrigin = "config"
+command = "npm run build"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
+
+[[headers]]
+for = "/*"
+
+[headers.values]
+Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
