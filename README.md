@@ -1,5 +1,10 @@
 # React + TypeScript + Vite
 
+## Project Docs
+
+- Assessment sources: `/Users/raychang/repo/career-advisor/ASSESSMENT_SOURCES.md`
+- Third-party notices / licensing notes: `/Users/raychang/repo/career-advisor/THIRD_PARTY_NOTICES.md`
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
