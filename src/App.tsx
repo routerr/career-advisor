@@ -17,8 +17,8 @@ function deriveLastAnsweredIndexFromAnswers(a: Record<string, number>): number {
 }
 
 function App() {
-  const [darkMode, setDarkMode] = useState(true);
   const initialProgress = useMemo(() => loadQuizProgress(), []);
+  const [darkMode, setDarkMode] = useState(initialProgress?.darkMode ?? true);
   const [lang, setLang] = useState<'en' | 'zh'>(initialProgress?.lang ?? 'zh');
   const [screen, setScreen] = useState<'welcome' | 'quiz' | 'results'>('welcome');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(() => {
@@ -67,6 +67,7 @@ function App() {
         ? progress.lastAnsweredIndex
         : deriveLastAnsweredIndexFromAnswers(progress.answers);
     setLang(progress.lang);
+    setDarkMode(progress.darkMode);
     setAnswers(progress.answers);
     setLastAnsweredIndex(resumeIdx);
     setCurrentQuestionIndex(Math.min(Math.max(0, resumeIdx), Math.max(0, questions.length - 1)));
@@ -97,6 +98,7 @@ function App() {
           currentQuestionIndex: nextIndex,
           lastAnsweredIndex: currentQuestionIndex,
           lang,
+          darkMode,
           timestamp: Date.now()
         });
         return newAnswers;
@@ -124,12 +126,13 @@ function App() {
           currentQuestionIndex,
           lastAnsweredIndex: currentQuestionIndex,
           lang,
+          darkMode,
           timestamp: Date.now()
         });
         return finalAnswers;
       });
     }
-  }, [currentQuestionIndex, lang]);
+  }, [currentQuestionIndex, lang, darkMode]);
 
   useEffect(() => {
     // Keep progress saved as the user navigates back/forward or changes language.
@@ -138,8 +141,8 @@ function App() {
       typeof lastAnsweredIndex === 'number' && Number.isFinite(lastAnsweredIndex) && lastAnsweredIndex >= 0
         ? lastAnsweredIndex
         : deriveLastAnsweredIndexFromAnswers(answers);
-    saveQuizProgress({ answers, currentQuestionIndex, lastAnsweredIndex: safeLastAnsweredIndex, lang, timestamp: Date.now() });
-  }, [answers, currentQuestionIndex, lang, lastAnsweredIndex]);
+    saveQuizProgress({ answers, currentQuestionIndex, lastAnsweredIndex: safeLastAnsweredIndex, lang, darkMode, timestamp: Date.now() });
+  }, [answers, currentQuestionIndex, lang, darkMode, lastAnsweredIndex]);
 
   const handlePrevious = useCallback(() => {
     setCurrentQuestionIndex(prev => (prev > 0 ? prev - 1 : prev));

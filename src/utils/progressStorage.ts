@@ -3,6 +3,7 @@ export interface StoredQuizProgress {
   currentQuestionIndex: number;
   lastAnsweredIndex: number;
   lang: 'en' | 'zh';
+  darkMode: boolean;
   timestamp: number;
 }
 
@@ -34,15 +35,16 @@ export function loadQuizProgress(): StoredQuizProgress | null {
     const parsed = JSON.parse(raw) as Partial<StoredQuizProgress>;
     if (!parsed) return null;
 
-    const { answers, currentQuestionIndex, lastAnsweredIndex, lang, timestamp } = parsed;
+    const { answers, currentQuestionIndex, lastAnsweredIndex, lang, darkMode, timestamp } = parsed;
     if (!isRecordOfNumbers(answers)) return null;
     if (typeof currentQuestionIndex !== 'number' || !Number.isFinite(currentQuestionIndex)) return null;
     const safeLastAnsweredIndex =
       typeof lastAnsweredIndex === 'number' && Number.isFinite(lastAnsweredIndex) ? lastAnsweredIndex : -1;
     if (lang !== 'en' && lang !== 'zh') return null;
+    const safeDarkMode = typeof darkMode === 'boolean' ? darkMode : true;
     if (typeof timestamp !== 'number' || !Number.isFinite(timestamp)) return null;
 
-    return { answers, currentQuestionIndex, lastAnsweredIndex: safeLastAnsweredIndex, lang, timestamp };
+    return { answers, currentQuestionIndex, lastAnsweredIndex: safeLastAnsweredIndex, lang, darkMode: safeDarkMode, timestamp };
   } catch {
     return null;
   }
