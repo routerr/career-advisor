@@ -25,7 +25,7 @@ export const questions: Question[] = [
   // -----------------------------
   { id: 'riasec_r_01', kind: 'riasec', dimension: 'R', text: { en: 'I enjoy building or fixing things with my hands.', zh: '我喜歡親手組裝、製作或修理東西。' } },
   { id: 'riasec_r_02', kind: 'riasec', dimension: 'R', text: { en: 'I would like a job that involves tools, machines, or equipment.', zh: '我希望工作會常常用到工具、機械或設備。' } },
-  { id: 'riasec_r_03', kind: 'riasec', dimension: 'R', text: { en: 'I enjoy working outdoors or in physical environments.', zh: '我喜歡戶外工作，或做需要動起來的工作。' } },
+  { id: 'riasec_r_03', kind: 'riasec', dimension: 'R', text: { en: 'I enjoy working outdoors or in physical environments.', zh: '我喜歡在戶外工作，或做需要一直動起來的工作。' } },
   { id: 'riasec_r_04', kind: 'riasec', dimension: 'R', text: { en: 'I like seeing immediate, tangible results from my work.', zh: '我喜歡工作做完就能看到實際成果。' } },
   { id: 'riasec_r_05', kind: 'riasec', dimension: 'R', text: { en: 'I enjoy troubleshooting practical problems (e.g., devices or hardware).', zh: '我喜歡處理實務問題（例如排除設備或硬體故障）。' } },
   { id: 'riasec_r_06', kind: 'riasec', dimension: 'R', text: { en: 'I prefer learning by doing rather than starting with theory.', zh: '比起一開始先讀理論，我更喜歡邊做邊學。' } },
@@ -45,17 +45,17 @@ export const questions: Question[] = [
   { id: 'riasec_a_06', kind: 'riasec', dimension: 'A', text: { en: 'I value aesthetics and storytelling in work.', zh: '我在意作品的美感與故事性。' } },
 
   { id: 'riasec_s_01', kind: 'riasec', dimension: 'S', text: { en: 'I enjoy helping people learn or grow.', zh: '我喜歡幫助別人學習或成長。' } },
-  { id: 'riasec_s_02', kind: 'riasec', dimension: 'S', text: { en: "I enjoy listening and understanding other people's needs.", zh: '我喜歡聽人說，也願意了解對方的需求。' } },
+  { id: 'riasec_s_02', kind: 'riasec', dimension: 'S', text: { en: "I enjoy listening and understanding other people's needs.", zh: '我喜歡聽人說話，也願意了解對方的需求。' } },
   { id: 'riasec_s_03', kind: 'riasec', dimension: 'S', text: { en: 'I would enjoy a role that involves teaching, coaching, or counseling.', zh: '我會喜歡教學、帶人、教練或諮詢類的工作。' } },
   { id: 'riasec_s_04', kind: 'riasec', dimension: 'S', text: { en: 'I prefer collaborating with others over working alone.', zh: '比起自己做，我更喜歡和別人一起合作。' } },
   { id: 'riasec_s_05', kind: 'riasec', dimension: 'S', text: { en: "I care about improving other people's well-being.", zh: '我在意能不能讓別人的生活變得更好。' } },
   { id: 'riasec_s_06', kind: 'riasec', dimension: 'S', text: { en: 'I enjoy resolving conflicts and supporting teamwork.', zh: '我喜歡協調衝突，幫助團隊更順利合作。' } },
 
-  { id: 'riasec_e_01', kind: 'riasec', dimension: 'E', text: { en: 'I enjoy persuading others or presenting ideas.', zh: '我喜歡說服他人，或用清楚的方式把想法講出來。' } },
+  { id: 'riasec_e_01', kind: 'riasec', dimension: 'E', text: { en: 'I enjoy persuading others or presenting ideas.', zh: '我喜歡說服別人，或把想法清楚講出來。' } },
   { id: 'riasec_e_02', kind: 'riasec', dimension: 'E', text: { en: 'I like taking initiative and making decisions.', zh: '我喜歡主動出手，並做決定。' } },
   { id: 'riasec_e_03', kind: 'riasec', dimension: 'E', text: { en: 'I enjoy negotiating, selling, or influencing outcomes.', zh: '我喜歡談判、銷售，或影響事情的結果。' } },
-  { id: 'riasec_e_04', kind: 'riasec', dimension: 'E', text: { en: 'I like setting ambitious goals and driving results.', zh: '我喜歡訂目標，並推進結果。' } },
-  { id: 'riasec_e_05', kind: 'riasec', dimension: 'E', text: { en: 'I would enjoy building a business or owning a project end-to-end.', zh: '我會喜歡從零到一負責一個專案，甚至創業。' } },
+  { id: 'riasec_e_04', kind: 'riasec', dimension: 'E', text: { en: 'I like setting ambitious goals and driving results.', zh: '我喜歡訂目標，然後把事情推到有成果。' } },
+  { id: 'riasec_e_05', kind: 'riasec', dimension: 'E', text: { en: 'I would enjoy building a business or owning a project end-to-end.', zh: '我喜歡從零到一負責一個專案，甚至自己創業。' } },
   { id: 'riasec_e_06', kind: 'riasec', dimension: 'E', text: { en: 'I enjoy environments where performance is clearly measured.', zh: '我喜歡成果能被清楚衡量的環境。' } },
 
   { id: 'riasec_c_01', kind: 'riasec', dimension: 'C', text: { en: 'I enjoy organizing information and keeping things orderly.', zh: '我喜歡整理資訊，讓事情更有條理。' } },
@@ -71,7 +71,7 @@ export const questions: Question[] = [
   // Openness
   { id: 'big5_o_01', kind: 'big5', dimension: 'Openness', text: { en: 'I have a vivid imagination.', zh: '我的想像力很豐富。' } },
   { id: 'big5_o_02', kind: 'big5', dimension: 'Openness', text: { en: 'I am full of ideas.', zh: '我常常冒出很多點子。' } },
-  { id: 'big5_o_03', kind: 'big5', dimension: 'Openness', text: { en: 'I have a rich vocabulary.', zh: '我的用字遣詞很豐富。' } },
+  { id: 'big5_o_03', kind: 'big5', dimension: 'Openness', text: { en: 'I have a rich vocabulary.', zh: '我的用字遣詞算豐富。' } },
   { id: 'big5_o_04', kind: 'big5', dimension: 'Openness', reverse: true, text: { en: 'I am not interested in abstract ideas.', zh: '我對抽象概念不太有興趣。' } },
   { id: 'big5_o_05', kind: 'big5', dimension: 'Openness', reverse: true, text: { en: 'I have difficulty understanding abstract ideas.', zh: '我常覺得抽象概念很難理解。' } },
 
@@ -79,11 +79,11 @@ export const questions: Question[] = [
   { id: 'big5_c_01', kind: 'big5', dimension: 'Conscientiousness', text: { en: 'I am always prepared.', zh: '我通常會事先準備好。' } },
   { id: 'big5_c_02', kind: 'big5', dimension: 'Conscientiousness', text: { en: 'I pay attention to details.', zh: '我很注意細節。' } },
   { id: 'big5_c_03', kind: 'big5', dimension: 'Conscientiousness', text: { en: 'I follow a schedule.', zh: '我習慣照著計畫或行程來做事。' } },
-  { id: 'big5_c_04', kind: 'big5', dimension: 'Conscientiousness', reverse: true, text: { en: 'I leave my belongings around.', zh: '我常把東西放著不收。' } },
+  { id: 'big5_c_04', kind: 'big5', dimension: 'Conscientiousness', reverse: true, text: { en: 'I leave my belongings around.', zh: '我常常東西用完就先放著，不太會馬上收好。' } },
   { id: 'big5_c_05', kind: 'big5', dimension: 'Conscientiousness', reverse: true, text: { en: 'I make a mess of things.', zh: '我常把事情弄得有點亂。' } },
 
   // Extraversion
-  { id: 'big5_e_01', kind: 'big5', dimension: 'Extraversion', text: { en: 'I am the life of the party.', zh: '在聚會中，我常是帶氣氛的人。' } },
+  { id: 'big5_e_01', kind: 'big5', dimension: 'Extraversion', text: { en: 'I am the life of the party.', zh: '在聚會中，我常常會帶氣氛。' } },
   { id: 'big5_e_02', kind: 'big5', dimension: 'Extraversion', text: { en: 'I feel comfortable around people.', zh: '跟人在一起時，我覺得很自在。' } },
   { id: 'big5_e_03', kind: 'big5', dimension: 'Extraversion', text: { en: 'I start conversations.', zh: '我常主動開話題。' } },
   { id: 'big5_e_04', kind: 'big5', dimension: 'Extraversion', reverse: true, text: { en: "I don't talk a lot.", zh: '我不太多話。' } },
@@ -93,8 +93,8 @@ export const questions: Question[] = [
   { id: 'big5_a_01', kind: 'big5', dimension: 'Agreeableness', text: { en: "I sympathize with others' feelings.", zh: '我能同理別人的感受。' } },
   { id: 'big5_a_02', kind: 'big5', dimension: 'Agreeableness', text: { en: 'I take time out for others.', zh: '我願意花時間幫忙別人。' } },
   { id: 'big5_a_03', kind: 'big5', dimension: 'Agreeableness', text: { en: "I feel others' emotions.", zh: '我很容易感受到別人的情緒。' } },
-  { id: 'big5_a_04', kind: 'big5', dimension: 'Agreeableness', reverse: true, text: { en: "I am not interested in other people's problems.", zh: '我對別人的問題不太關心。' } },
-  { id: 'big5_a_05', kind: 'big5', dimension: 'Agreeableness', reverse: true, text: { en: 'I insult people.', zh: '我有時會說些難聽的話。' } },
+  { id: 'big5_a_04', kind: 'big5', dimension: 'Agreeableness', reverse: true, text: { en: "I am not interested in other people's problems.", zh: '我對別人的問題比較不關心。' } },
+  { id: 'big5_a_05', kind: 'big5', dimension: 'Agreeableness', reverse: true, text: { en: 'I insult people.', zh: '我有時說話會比較直接，可能會傷到人。' } },
 
   // Neuroticism
   { id: 'big5_n_01', kind: 'big5', dimension: 'Neuroticism', text: { en: 'I get stressed out easily.', zh: '我很容易感到壓力。' } },
@@ -109,7 +109,7 @@ export const questions: Question[] = [
   // Autonomy
   { id: 'values_aut_01', kind: 'values', dimension: 'Autonomy', text: { en: 'I value having control over how I do my work.', zh: '我重視能自己決定怎麼做工作。' } },
   { id: 'values_aut_02', kind: 'values', dimension: 'Autonomy', text: { en: 'I prefer roles with flexibility in time or location when possible.', zh: '如果可以，我希望工作時間或地點更有彈性。' } },
-  { id: 'values_aut_03', kind: 'values', dimension: 'Autonomy', text: { en: 'I want room to make decisions without constant approval.', zh: '我希望做決定時，不需要一直請示。' } },
+  { id: 'values_aut_03', kind: 'values', dimension: 'Autonomy', text: { en: 'I want room to make decisions without constant approval.', zh: '我希望做決定時，不用一直請示。' } },
 
   // Stability
   { id: 'values_sta_01', kind: 'values', dimension: 'Stability', text: { en: 'I prefer stable income and predictable responsibilities.', zh: '我重視穩定收入與明確的工作內容。' } },
@@ -119,7 +119,7 @@ export const questions: Question[] = [
   // Growth
   { id: 'values_gro_01', kind: 'values', dimension: 'Growth', text: { en: 'I want work that pushes me to learn and improve quickly.', zh: '我希望工作能推著我快速學習與進步。' } },
   { id: 'values_gro_02', kind: 'values', dimension: 'Growth', text: { en: 'I enjoy tackling difficult challenges to build mastery.', zh: '我喜歡挑戰難題來累積實力。' } },
-  { id: 'values_gro_03', kind: 'values', dimension: 'Growth', text: { en: 'I prefer environments with frequent feedback and mentorship.', zh: '我喜歡有前輩帶、也常有回饋的環境。' } },
+  { id: 'values_gro_03', kind: 'values', dimension: 'Growth', text: { en: 'I prefer environments with frequent feedback and mentorship.', zh: '我喜歡有人帶，也常常得到回饋的環境。' } },
 
   // Impact
   { id: 'values_imp_01', kind: 'values', dimension: 'Impact', text: { en: 'I want my work to meaningfully help others or society.', zh: '我希望我的工作能對他人或社會有實際幫助。' } },
