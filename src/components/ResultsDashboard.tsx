@@ -32,14 +32,36 @@ const AI_PROVIDERS: Record<AIProviderId, { name: string; url: string; supportsPr
   grok: { name: 'Grok', url: 'https://grok.com', supportsPrefill: false },
 };
 
-function buildProviderUrl(provider: AIProviderId, prompt: string): string {
-  const encoded = encodeURIComponent(prompt);
-  // Avoid extremely long URLs; clipboard + modal is the reliable path.
-  const safeToPrefill = encoded.length <= 1800;
+function truncatePromptForUrl(prompt: string, maxEncodedLength = 1700): string {
+  if (!prompt) return prompt;
+  if (encodeURIComponent(prompt).length <= maxEncodedLength) return prompt;
 
-  if (!AI_PROVIDERS[provider].supportsPrefill || !safeToPrefill) {
+  let lo = 0;
+  let hi = prompt.length;
+  while (lo < hi) {
+    const mid = Math.ceil((lo + hi) / 2);
+    const candidate = `${prompt.slice(0, mid).trimEnd()}...`;
+    if (encodeURIComponent(candidate).length <= maxEncodedLength) {
+      lo = mid;
+    } else {
+      hi = mid - 1;
+    }
+  }
+
+  if (lo <= 0) return '';
+  return `${prompt.slice(0, lo).trimEnd()}...`;
+}
+
+function buildProviderUrl(provider: AIProviderId, prompt: string): string {
+  if (!AI_PROVIDERS[provider].supportsPrefill) {
     return AI_PROVIDERS[provider].url;
   }
+
+  const promptForUrl = truncatePromptForUrl(prompt);
+  if (!promptForUrl) {
+    return AI_PROVIDERS[provider].url;
+  }
+  const encoded = encodeURIComponent(promptForUrl);
 
   switch (provider) {
     case 'chatgpt':
